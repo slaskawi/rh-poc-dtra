@@ -1,2 +1,5 @@
 # rh-poc-dtra
-Red Hat Proof of Concept DTRA Scheduling - Business Resource Planner
+Red Hat Proof of Concept Business Resource Planner
+DTRA Scheduling - Ericsson
+
+Red Hat Mexico
