@@ -1,0 +1,44 @@
+package com.vsp.infraestructura.client;
+
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+
+public class GGWException extends Exception implements IsSerializable
+{
+	/**
+	 * LGONZALEZ
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	protected String mensaje;
+	protected String exeption;
+	
+	public GGWException()
+	{
+		super();
+	}
+	
+	public GGWException(String mensaje)
+	{
+		this.mensaje = mensaje;
+	}
+	
+	public GGWException(Exception ex)
+	{
+		super(ex);
+	}
+	
+	public GGWException(Throwable th)
+	{
+		super(th);
+	}
+	
+	public String getMensajeEmcoWeb()
+	{
+		return mensaje;
+	}
+
+	public String getExeption() {
+		return exeption;
+	}
+}

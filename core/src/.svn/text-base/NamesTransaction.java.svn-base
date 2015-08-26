@@ -1,0 +1,40 @@
+package com.vsp.infraestructura.client;
+
+import java.util.LinkedHashMap;
+
+import com.google.gwt.user.client.rpc.IsSerializable;
+import com.vsp.infraestructura.server.transacciones.TxCargasAnomalas;
+import com.vsp.infraestructura.server.transacciones.TxPnlEstructuraConFiltrado;
+import com.vsp.infraestructura.server.transacciones.TxPreceptoresEntrenadores;
+import com.vsp.infraestructura.server.transacciones.TxRendimientoFodeco;
+import com.vsp.infraestructura.server.transacciones.TxRendimientoVSMeta;
+import com.vsp.infraestructura.server.transacciones.TxSemaforosFodeco;
+
+public class NamesTransaction implements IsSerializable
+{
+	public static NamesTransaction obj = null;
+	private LinkedHashMap<NamesTX, String> hmIds = new LinkedHashMap<NamesTX, String>();
+	
+	public NamesTransaction()
+	{
+		hmIds.put(NamesTX.txPnlEstructura, TxPnlEstructuraConFiltrado.class.getCanonicalName());
+		hmIds.put(NamesTX.txSemaforos, TxSemaforosFodeco.class.getCanonicalName());
+		hmIds.put(NamesTX.txRendimientoFodeco, TxRendimientoFodeco.class.getCanonicalName());
+		hmIds.put(NamesTX.txPreceptorEntrenador, TxPreceptoresEntrenadores.class.getCanonicalName());
+		hmIds.put(NamesTX.txRendimientoVSMeta, TxRendimientoVSMeta.class.getCanonicalName());
+		hmIds.put(NamesTX.txCargasAnomalas, TxCargasAnomalas.class.getCanonicalName());
+	}
+	
+	public static NamesTransaction getInstance()
+	{
+		if(obj == null)
+		{
+			obj = new NamesTransaction();
+		}
+		return obj;
+	}
+
+	public LinkedHashMap<NamesTX, String> getHmIds() {
+		return hmIds;
+	}
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+                                         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+ <session-factory name="dtra">
+  <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+  <property name="hibernate.connection.url">jdbc:postgresql://128.1.63.108:5432/dtra</property>
+  <property name="hibernate.connection.username">postgres</property>
+  <property name="hibernate.connection.password">Emco123</property>
+  <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+  <!-- Disable HQL  -->
+  <property name="hibernate.show.sql">true</property>
+  <!-- Disable the second-level cache  -->
+  <property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
+  
+  	<mapping class="mx.redhat.ericsson.dtra.entidades.Activity" resource="mx/redhat/ericsson/dtra/entidades/Activity.hbm.xml"/>
+  	<mapping class="mx.redhat.ericsson.dtra.entidades.Engineer" resource="mx/redhat/ericsson/dtra/entidades/Engineer.hbm.xml"/>
+ </session-factory>
+</hibernate-configuration>
