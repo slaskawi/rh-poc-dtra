@@ -1,4 +1,4 @@
-package mx.redhat.ericsson.dtra.infraestructura.client;
+package mx.redhat.ericsson.dtra.infrastructure.client;
 
 import java.beans.Transient;
 import java.util.Map;

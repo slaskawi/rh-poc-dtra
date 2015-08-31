@@ -1,4 +1,4 @@
-package mx.redhat.ericsson.dtra.infraestructura.client;
+package mx.redhat.ericsson.dtra.infrastructure.client;
 
 public enum NamesTX
 {

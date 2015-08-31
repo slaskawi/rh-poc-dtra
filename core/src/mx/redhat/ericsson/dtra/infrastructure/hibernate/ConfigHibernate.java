@@ -1,11 +1,11 @@
-package mx.redhat.ericsson.dtra.infraestructura.hibernate;
+package mx.redhat.ericsson.dtra.infrastructure.hibernate;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+import org.hibernate.service.ServiceRegistryBuilder;
 
 /**
  * @author LGONZALEZ
@@ -40,17 +40,15 @@ public class ConfigHibernate
 	{
 		try
 		{
-			Configuration configuracion = new Configuration().configure(new ConfigHibernate().getClass().getResource("/com/vsp/infraestructura/server/hibernate/hibernate.cfg.xml"));
-			ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuracion.getProperties()).build();
-			sessionFactory = configuracion.buildSessionFactory(serviceRegistry);
+			Configuration configuration = new Configuration().configure(new ConfigHibernate().getClass().getResource("/mx/redhat/ericsson/dtra/infraestructura/server/hibernate/hibernate.cfg.xml"));
+			ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
+			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 		}
 		catch (Exception e)
 		{
-			System.err.println("###################################################################");
-			System.err.println("##########ERROR AL CREAR SESSIONFACTORY HIBERNATE FODECO###########");
-			System.err.println("###################################################################");
-			System.err.println("###########################LGONZALEZ###############################");
-			System.err.println("###################################################################");
+			System.err.println("##################################################################");
+			System.err.println("############## SESSIONFACTORY HIBERNATE NOT CREATE ###############");
+			System.err.println("##################################################################");
 			e.printStackTrace();
 		}
 	}

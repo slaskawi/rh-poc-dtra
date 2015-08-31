@@ -1,4 +1,4 @@
-package mx.redhat.ericsson.dtra.infraestructura.tx;
+package mx.redhat.ericsson.dtra.infrastructure.tx;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import mx.redhat.ericsson.dtra.infraestructura.client.EntidadGenerica;
+import mx.redhat.ericsson.dtra.infrastructure.client.GenericEntity;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -15,24 +15,24 @@ import org.hibernate.Session;
  * @author LuisGlz
  */
 
-public abstract class Transaccion implements TransaccionLauncher<TransaccionDTO>
+public abstract class Transaction implements TransactionLauncher<TransactionDTO>
 {
 	protected List<Object> params = null;
 	protected List<Object> resultadoTX = null;
-	protected TransaccionDTO dtoResponse = null;
+	protected TransactionDTO dtoResponse = null;
 	
 	protected SimpleDateFormat formatFecha = new SimpleDateFormat("dd/MM/yyyy");
 	protected SimpleDateFormat formatFechaHora = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 	protected DecimalFormat formatDecimal2 = new DecimalFormat("##.00"); 
 	
-	public Transaccion() 
+	public Transaction() 
 	{
 		this.resultadoTX = new ArrayList<Object>();
-		dtoResponse = new TransaccionDTO(resultadoTX);
+		dtoResponse = new TransactionDTO(resultadoTX);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T extends EntidadGenerica> List<T> busquedaGenerica(Session sesion,T objBuscar)throws Exception
+	public <T extends GenericEntity> List<T> busquedaGenerica(Session sesion,T objBuscar)throws Exception
 	{
 		ArrayList<T> data = new ArrayList<T>();
 		try

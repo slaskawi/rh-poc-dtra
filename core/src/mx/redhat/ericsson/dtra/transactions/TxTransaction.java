@@ -1,4 +1,4 @@
-package mx.redhat.ericsson.dtra.transacciones;
+package mx.redhat.ericsson.dtra.transactions;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import mx.redhat.ericsson.dtra.infraestructura.tx.Transaccion;
-import mx.redhat.ericsson.dtra.infraestructura.tx.TransaccionDTO;
+import mx.redhat.ericsson.dtra.infrastructure.tx.Transaction;
+import mx.redhat.ericsson.dtra.infrastructure.tx.TransactionDTO;
 
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 
-public class TxTransaccion extends Transaccion{
+public class TxTransaction extends Transaction{
 
 	private String region = null;
 	private String marca = null;
@@ -25,7 +25,7 @@ public class TxTransaccion extends Transaccion{
 	private List<Object> params = null;
 	
 	@Override
-	public TransaccionDTO ejecutaTransaccion(Session sesion) throws Exception
+	public TransactionDTO ejecutaTransaccion(Session sesion) throws Exception
 	{
 		//resultadoTX.add(valorMax);
 		//resultadoTX.add(valorMax);

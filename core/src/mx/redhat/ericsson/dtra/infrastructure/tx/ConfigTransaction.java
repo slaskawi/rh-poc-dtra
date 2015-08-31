@@ -1,23 +1,23 @@
-package mx.redhat.ericsson.dtra.infraestructura.tx;
+package mx.redhat.ericsson.dtra.infrastructure.tx;
 
 
 /**
  * @author LuisGlz
  */
-public class ConfigTransaccion
+public class ConfigTransaction
 {
-	private static ConfigTransaccion instance = null;
+	private static ConfigTransaction instance = null;
 
-	private ConfigTransaccion()
+	private ConfigTransaction()
 	{
 		
 	}
 	
-	public static ConfigTransaccion getInstance() 
+	public static ConfigTransaction getInstance() 
 	{
 		if (instance == null)
 		{
-			instance = new ConfigTransaccion();
+			instance = new ConfigTransaction();
 		}
 		return instance;
 	}
@@ -46,12 +46,12 @@ public class ConfigTransaccion
 	*/
 	
 	@SuppressWarnings({ "unchecked"})
-	public TransaccionLauncher<TransaccionDTO> creaTransaccion(String miTx)throws Exception
+	public TransactionLauncher<TransactionDTO> creaTransaccion(String miTx)throws Exception
 	{
 		String className = miTx;
 		try
 		{
-			return (TransaccionLauncher<TransaccionDTO>) Class.forName(className).newInstance();
+			return (TransactionLauncher<TransactionDTO>) Class.forName(className).newInstance();
 		}
 		catch (Exception e)
 		{

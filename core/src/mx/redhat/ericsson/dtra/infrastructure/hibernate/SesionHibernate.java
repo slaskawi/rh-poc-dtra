@@ -1,4 +1,4 @@
-package mx.redhat.ericsson.dtra.infraestructura.hibernate;
+package mx.redhat.ericsson.dtra.infrastructure.hibernate;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -6,12 +6,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import mx.redhat.ericsson.dtra.infraestructura.client.EntidadGenerica;
-import mx.redhat.ericsson.dtra.infraestructura.client.NamesTransaction;
-import mx.redhat.ericsson.dtra.infraestructura.tx.ConfigTransaccion;
-import mx.redhat.ericsson.dtra.infraestructura.tx.SessionHB;
-import mx.redhat.ericsson.dtra.infraestructura.tx.TransaccionDTO;
-import mx.redhat.ericsson.dtra.infraestructura.tx.TransaccionLauncher;
+import mx.redhat.ericsson.dtra.infrastructure.client.GenericEntity;
+import mx.redhat.ericsson.dtra.infrastructure.client.NamesTransaction;
+import mx.redhat.ericsson.dtra.infrastructure.tx.ConfigTransaction;
+import mx.redhat.ericsson.dtra.infrastructure.tx.SessionHB;
+import mx.redhat.ericsson.dtra.infrastructure.tx.TransactionDTO;
+import mx.redhat.ericsson.dtra.infrastructure.tx.TransactionLauncher;
 
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -76,7 +76,7 @@ public class SesionHibernate implements SessionHB
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends EntidadGenerica> List<T> busquedaGenerica(T objBuscar) throws Exception
+	public <T extends GenericEntity> List<T> busquedaGenerica(T objBuscar) throws Exception
 	{
 		sessionHB = ConfigHibernate.getSession();
 
@@ -131,7 +131,7 @@ public class SesionHibernate implements SessionHB
 		return data;
 	}
 	
-	public TransaccionDTO ejecutaTransaccion(TransaccionDTO transaccionDTO) throws Exception
+	public TransactionDTO ejecutaTransaccion(TransactionDTO transaccionDTO) throws Exception
 	{
 		sessionHB = null;
 		Transaction tx = null;
@@ -141,9 +141,9 @@ public class SesionHibernate implements SessionHB
 		{
 			tx = sessionHB.beginTransaction();
 			String canonicalName = NamesTransaction.getInstance().getHmIds().get(transaccionDTO.getClassTx());
-			TransaccionLauncher<TransaccionDTO> objTx = ConfigTransaccion.getInstance().creaTransaccion(canonicalName);
+			TransactionLauncher<TransactionDTO> objTx = ConfigTransaction.getInstance().creaTransaccion(canonicalName);
 			objTx.inicializaParametros(transaccionDTO.getParametrosTx());
-			transaccionDTO = (TransaccionDTO) objTx.ejecutaTransaccion(sessionHB);
+			transaccionDTO = (TransactionDTO) objTx.ejecutaTransaccion(sessionHB);
 			transaccionDTO.setClassTx(null);
 			transaccionDTO.setParametrosTx(null);
 			tx.commit();
@@ -186,7 +186,7 @@ public class SesionHibernate implements SessionHB
 //	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends EntidadGenerica> T busquedaPorId(T objBuscar) throws Exception
+	public <T extends GenericEntity> T busquedaPorId(T objBuscar) throws Exception
 	{
 		sessionHB = ConfigHibernate.getSession();
 
@@ -229,7 +229,7 @@ public class SesionHibernate implements SessionHB
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends EntidadGenerica> T busquedaGenericaSimple(T objBuscar)throws Exception 
+	public <T extends GenericEntity> T busquedaGenericaSimple(T objBuscar)throws Exception 
 	{
 		sessionHB = ConfigHibernate.getSession();
 
@@ -282,7 +282,7 @@ public class SesionHibernate implements SessionHB
 	}
 
 	@Override
-	public <T extends EntidadGenerica> T guardaActualiza(T objGuardar)throws Exception 
+	public <T extends GenericEntity> T guardaActualiza(T objGuardar)throws Exception 
 	{
 
 		sessionHB = ConfigHibernate.getSession();

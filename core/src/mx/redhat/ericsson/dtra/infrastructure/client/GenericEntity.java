@@ -1,4 +1,4 @@
-package mx.redhat.ericsson.dtra.infraestructura.client;
+package mx.redhat.ericsson.dtra.infrastructure.client;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -10,7 +10,7 @@ import java.util.Map;
  */
 
 @SuppressWarnings("serial")
-public abstract class EntidadGenerica implements IQuerys, Serializable {
+public abstract class GenericEntity implements IQuerys, Serializable {
 	
 	protected String queryHql = "";
 	protected Map<Object, Object> params = new HashMap<Object, Object>();

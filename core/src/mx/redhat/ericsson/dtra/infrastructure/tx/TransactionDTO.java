@@ -1,26 +1,26 @@
-package mx.redhat.ericsson.dtra.infraestructura.tx;
+package mx.redhat.ericsson.dtra.infrastructure.tx;
 
 import java.io.Serializable;
 import java.util.List;
 
-import mx.redhat.ericsson.dtra.infraestructura.client.NamesTX;
+import mx.redhat.ericsson.dtra.infrastructure.client.NamesTX;
 
 /**
  * @author LuisGlz
  */
 
 @SuppressWarnings("serial")
-public class TransaccionDTO implements Serializable
+public class TransactionDTO implements Serializable
 {
 	protected List<Object> parametrosTx = null;
 	protected List<Object> resultadosTx = null;
 //	protected TransaccionClavesValue idTransaccion = null; //SPRING :(
 	protected NamesTX classTx = null;
 	
-	public TransaccionDTO() {
+	public TransactionDTO() {
 	}
 	
-	public TransaccionDTO(List<Object> resultado) {
+	public TransactionDTO(List<Object> resultado) {
 		this.resultadosTx = resultado;
 	}
 

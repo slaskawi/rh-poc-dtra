@@ -1,8 +1,8 @@
-package mx.redhat.ericsson.dtra.infraestructura.client;
+package mx.redhat.ericsson.dtra.infrastructure.client;
 
 import java.util.LinkedHashMap;
 
-import mx.redhat.ericsson.dtra.transacciones.TxTransaccion;
+import mx.redhat.ericsson.dtra.transactions.TxTransaction;
 
 public class NamesTransaction
 {
@@ -11,7 +11,7 @@ public class NamesTransaction
 	
 	public NamesTransaction()
 	{
-		hmIds.put(NamesTX.txCargasAnomalas, TxTransaccion.class.getCanonicalName());
+		hmIds.put(NamesTX.txCargasAnomalas, TxTransaction.class.getCanonicalName());
 	}
 	
 	public static NamesTransaction getInstance()
