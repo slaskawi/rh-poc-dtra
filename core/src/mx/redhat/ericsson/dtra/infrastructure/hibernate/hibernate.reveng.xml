@@ -5,5 +5,5 @@
 
 <table-filter match-schema="public" match-name="activity"/>
 <table-filter match-schema="public" match-name="engineer"/>
-<table-filter match-schema="public" match-name="work_package"/>
+<table-filter match-schema="public" match-name="engineer_competence"/>
 </hibernate-reverse-engineering>
