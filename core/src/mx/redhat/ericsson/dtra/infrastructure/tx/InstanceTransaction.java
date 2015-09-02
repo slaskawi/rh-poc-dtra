@@ -15,7 +15,7 @@ public class InstanceTransaction
 	}
 	
 	@SuppressWarnings({ "unused", "unchecked", "rawtypes" })
-	private TransactionLauncher<TransactionDTO> creaTransaccion(Class miTx)throws Exception
+	private TransactionLauncher<TransactionDTO> createTransaction(Class miTx)throws Exception
 	{
 		String className = miTx.getCanonicalName();
 		try

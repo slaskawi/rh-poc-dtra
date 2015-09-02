@@ -18,32 +18,32 @@ import org.hibernate.Session;
 public abstract class Transaction implements TransactionLauncher<TransactionDTO>
 {
 	protected List<Object> params = null;
-	protected List<Object> resultadoTX = null;
+	protected List<Object> resultsTX = null;
 	protected TransactionDTO dtoResponse = null;
 	
-	protected SimpleDateFormat formatFecha = new SimpleDateFormat("dd/MM/yyyy");
-	protected SimpleDateFormat formatFechaHora = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+	protected SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy");
+	protected SimpleDateFormat formatDateHour = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 	protected DecimalFormat formatDecimal2 = new DecimalFormat("##.00"); 
 	
 	public Transaction() 
 	{
-		this.resultadoTX = new ArrayList<Object>();
-		dtoResponse = new TransactionDTO(resultadoTX);
+		this.resultsTX = new ArrayList<Object>();
+		dtoResponse = new TransactionDTO(resultsTX);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T extends GenericEntity> List<T> busquedaGenerica(Session sesion,T objBuscar)throws Exception
+	public <T extends GenericEntity> List<T> busquedaGenerica(Session sesion,T objQuest)throws Exception
 	{
 		ArrayList<T> data = new ArrayList<T>();
 		try
 		{
-			Query query = sesion.createQuery(objBuscar.getQueryHql());
-			Map<Object, Object> params = objBuscar.getParametros();
+			Query query = sesion.createQuery(objQuest.getQueryHql());
+			Map<Object, Object> params = objQuest.getParams();
 			if ((params != null) && (params.size() > 0))
 			{
 				query.setProperties(params);
 			}
-			query.setMaxResults(objBuscar.MAXIMO_CONSULTA);
+			query.setMaxResults(objQuest.MAX_RESULTS);
 			
 			List<T> rs = query.list();
 			for (T obj : rs)

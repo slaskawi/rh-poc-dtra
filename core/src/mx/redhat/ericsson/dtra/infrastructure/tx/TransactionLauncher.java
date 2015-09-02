@@ -10,6 +10,5 @@ import org.hibernate.Session;
 
 public interface TransactionLauncher<T extends TransactionDTO>
 {
-	public T ejecutaTransaccion(Session sesion) throws Exception;
-	public void inicializaParametros(List<Object> parametros);
+	public T executeTransaction(Session sesion) throws Exception;
 }

@@ -16,52 +16,6 @@ public abstract class GenericEntity implements IQuerys, Serializable {
 	protected Map<Object, Object> params = new HashMap<Object, Object>();
 	protected String toString = "";
 
-	public int MAXIMO_CONSULTA = Integer.MAX_VALUE;
-	/**
-	 * Datos Generales
-	 */
-	public Date feccreacion;
-	public Date fecact;
-	public Integer usucreacion;
-	public Integer usuact;
+	public int MAX_RESULTS = Integer.MAX_VALUE;
 	
-	//Datos CATALOGOS
-	public int statusCat = 0;
-	
-	public Date getFeccreacion() {
-		return this.feccreacion;
-	}
-
-	public void setFeccreacion(Date feccreacion) {
-		this.feccreacion = feccreacion;
-	}
-
-	public Date getFecact() {
-		return this.fecact;
-	}
-
-	public void setFecact(Date fecact) {
-		this.fecact = fecact;
-	}
-	
-	public Integer getUsucreacion() {
-		return this.usucreacion;
-	}
-
-	public void setUsucreacion(Integer usucreacion) {
-		this.usucreacion = usucreacion;
-	}
-	
-	public Integer getUsuact() {
-		return this.usuact;
-	}
-
-	public void setUsuact(Integer usuact) {
-		this.usuact = usuact;
-	}
-	
-	public String getStatusToString(Boolean status)
-	{
-		return status.booleanValue() ? "ACTIVO" : "INACTIVO";
-	}
 }

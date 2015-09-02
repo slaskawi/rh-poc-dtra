@@ -11,7 +11,7 @@ public class NamesTransaction
 	
 	public NamesTransaction()
 	{
-		hmIds.put(NamesTX.txCargasAnomalas, TxTransaction.class.getCanonicalName());
+		hmIds.put(NamesTX.txTransaction, TxTransaction.class.getCanonicalName());
 	}
 	
 	public static NamesTransaction getInstance()

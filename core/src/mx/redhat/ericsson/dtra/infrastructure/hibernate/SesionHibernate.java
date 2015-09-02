@@ -76,7 +76,7 @@ public class SesionHibernate implements SessionHB
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends GenericEntity> List<T> busquedaGenerica(T objBuscar) throws Exception
+	public <T extends GenericEntity> List<T> genericResearch(T objBuscar) throws Exception
 	{
 		sessionHB = ConfigHibernate.getSession();
 
@@ -87,12 +87,12 @@ public class SesionHibernate implements SessionHB
 			tx = sessionHB.beginTransaction();
 			
 			Query query = sessionHB.createQuery(objBuscar.getQueryHql());
-			Map<Object, Object> params = objBuscar.getParametros();
+			Map<Object, Object> params = objBuscar.getParams();
 			if ((params != null) && (params.size() > 0))
 			{
 				query.setProperties(params);
 			}
-			query.setMaxResults(objBuscar.MAXIMO_CONSULTA);
+			query.setMaxResults(objBuscar.MAX_RESULTS);
 			
 			List<T> rs = query.list();
 			for (T obj : rs)
@@ -131,7 +131,7 @@ public class SesionHibernate implements SessionHB
 		return data;
 	}
 	
-	public TransactionDTO ejecutaTransaccion(TransactionDTO transaccionDTO) throws Exception
+	public TransactionDTO executeTransaction(TransactionDTO transactionDTO) throws Exception
 	{
 		sessionHB = null;
 		Transaction tx = null;
@@ -140,15 +140,15 @@ public class SesionHibernate implements SessionHB
 		try
 		{
 			tx = sessionHB.beginTransaction();
-			String canonicalName = NamesTransaction.getInstance().getHmIds().get(transaccionDTO.getClassTx());
-			TransactionLauncher<TransactionDTO> objTx = ConfigTransaction.getInstance().creaTransaccion(canonicalName);
-			objTx.inicializaParametros(transaccionDTO.getParametrosTx());
-			transaccionDTO = (TransactionDTO) objTx.ejecutaTransaccion(sessionHB);
-			transaccionDTO.setClassTx(null);
-			transaccionDTO.setParametrosTx(null);
+			String canonicalName = NamesTransaction.getInstance().getHmIds().get(transactionDTO.getClassTx());
+			TransactionLauncher<TransactionDTO> objTx = ConfigTransaction.getInstance().createTransaction(canonicalName);
+			//objTx.initParams(transaccionDTO.getParamsTx());
+			transactionDTO = (TransactionDTO) objTx.executeTransaction(sessionHB);
+			transactionDTO.setClassTx(null);
+			transactionDTO.setParamsTx(null);
 			tx.commit();
 
-			return transaccionDTO;
+			return transactionDTO;
 		}
 		catch (Exception e)
 		{
@@ -186,17 +186,17 @@ public class SesionHibernate implements SessionHB
 //	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends GenericEntity> T busquedaPorId(T objBuscar) throws Exception
+	public <T extends GenericEntity> T selectById(T objQuest) throws Exception
 	{
 		sessionHB = ConfigHibernate.getSession();
 
 		Transaction tx = null;
-		T resultado = null;
+		T result = null;
 		try
 		{
 			tx = sessionHB.beginTransaction();
 
-			resultado = (T) sessionHB.get(objBuscar.getClass(), objBuscar.getID());
+			result = (T) sessionHB.get(objQuest.getClass(), objQuest.getID());
 			tx.rollback();
 		}
 		catch (Exception e)
@@ -224,7 +224,7 @@ public class SesionHibernate implements SessionHB
 			}
 		}
 
-		return resultado;
+		return result;
 
 	}
 
@@ -240,7 +240,7 @@ public class SesionHibernate implements SessionHB
 			tx = sessionHB.beginTransaction();
 			
 			Query query = sessionHB.createQuery(objBuscar.getQueryHql());
-			Map<Object, Object> params = objBuscar.getParametros();
+			Map<Object, Object> params = objBuscar.getParams();
 
 			if ((params != null) && (params.size() > 0))
 			{
@@ -282,7 +282,7 @@ public class SesionHibernate implements SessionHB
 	}
 
 	@Override
-	public <T extends GenericEntity> T guardaActualiza(T objGuardar)throws Exception 
+	public <T extends GenericEntity> T createOrUpdate(T objGuardar)throws Exception 
 	{
 
 		sessionHB = ConfigHibernate.getSession();

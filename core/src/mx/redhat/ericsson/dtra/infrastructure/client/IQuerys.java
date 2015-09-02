@@ -14,5 +14,5 @@ public interface IQuerys
 	@Transient
 	public String getQueryHql();
 	@Transient
-	public Map<Object, Object>getParametros();
+	public Map<Object, Object>getParams();
 }
