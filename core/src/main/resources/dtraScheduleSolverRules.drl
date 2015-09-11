@@ -1,0 +1,48 @@
+//created on: Sep 1, 2015
+package mx.redhat.ericsson.dtra;
+	dialect "java"
+
+//list any import classes here.
+import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScoreHolder;
+
+import mx.redhat.ericsson.dtra.model.Task;
+import mx.redhat.ericsson.dtra.model.Engineer;
+
+
+//declare any global variables here
+global HardSoftScoreHolder scoreHolder;
+
+
+// ############################################################################
+// Hard constraints
+// ############################################################################
+
+
+rule "unassignedTask"
+
+    when
+        $a : Task( engineer == null )
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, -1);
+end
+
+
+// ############################################################################
+// Soft constraints
+// ############################################################################
+
+rule "afterDueDate"
+    when
+        $a : Task(dueDate < endingTime)
+    then
+        scoreHolder.addSoftConstraintMatch(kcontext, -1);
+end
+
+/*
+rule "beforeEarlyDate"
+    when
+        $a : Task(earlyStart > startingTime)
+    then
+        scoreHolder.addSoftConstraintMatch(kcontext, -1);
+end
+*/

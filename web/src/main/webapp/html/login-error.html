@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+<meta charset="utf-8">
+<title>DTRA Scheduling PoC</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet"
+	href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<img src="images/ericsson.png" class="center-block" height="120px">
+				<h1 class="text-center">DTRA Scheduling PoC</h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4 col-md-offset-4">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Acceso a usuarios</h3>
+					</div>
+					<div class="panel-body">
+						<form id="login_form" name="login_form" method="post"
+							action="j_security_check"
+							enctype="application/x-www-form-urlencoded"
+							accept-charset="UTF-8" data-role="form">
+							<fieldset>
+								<div class="form-group">
+									<input id="username" class="form-control"
+										placeholder="Username" name="j_username" type="text">
+								</div>
+								<div class="form-group">
+									<input id="password" class="form-control"
+										placeholder="Contraseña" name="j_password" type="Password"
+										value="">
+								</div>
+								<input id="submit" class="btn btn-lg btn-primary btn-block"
+									name="submit" type="submit" value="Log In">
+							</fieldset>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+	
+	<display-name>scheduler</display-name>
+
+    <description>DTRA Scheduler</description>
+	
+	<!-- Define a Security Constraint on this Application -->
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>all</web-resource-name>
+			<url-pattern>/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>*</role-name>
+		</auth-constraint>
+	</security-constraint>
+	
+	
+		<!-- Define a security constraint that gives unlimited access to images -->
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>REST</web-resource-name>
+			<url-pattern>/application/*</url-pattern>
+		</web-resource-collection>
+		<web-resource-collection>
+			<web-resource-name>Fonts</web-resource-name>
+			<url-pattern>/fonts/*</url-pattern>
+		</web-resource-collection>
+		<web-resource-collection>
+			<web-resource-name>Resources</web-resource-name>
+			<url-pattern>/resources/*</url-pattern>
+		</web-resource-collection>
+		<web-resource-collection>
+			<web-resource-name>Images</web-resource-name>
+			<url-pattern>/images/*</url-pattern>
+		</web-resource-collection>
+		<web-resource-collection>
+			<web-resource-name>Scripts</web-resource-name>
+			<url-pattern>/scripts/*</url-pattern>
+		</web-resource-collection>
+		<web-resource-collection>
+			<web-resource-name>Styles</web-resource-name>
+			<url-pattern>/styles/*</url-pattern>
+		</web-resource-collection>
+		<web-resource-collection>
+			<web-resource-name>CSS</web-resource-name>
+			<url-pattern>/css/*</url-pattern>
+		</web-resource-collection>
+	</security-constraint>
+
+
+    <!-- Define the Login Configuration for this Application -->  
+    <login-config>
+		<auth-method>FORM</auth-method>
+		<form-login-config>
+			<form-login-page>/html/login.html</form-login-page>
+			<form-error-page>/html/login-error.html</form-error-page>
+		</form-login-config>
+	</login-config>
+	
+
+	<!-- Security roles referenced by this web application -->
+	<security-role>
+		<description>The role that is required to log in to the Application</description>
+		<role-name>user</role-name>
+	</security-role>
+	
+
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+	
+	<!-- 
+	<servlet>
+		<servlet-name>javax.ws.rs.core.Application</servlet-name>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>javax.ws.rs.core.Application</servlet-name>
+		<url-pattern>/application/*</url-pattern>
+	</servlet-mapping>
+	 -->
+
+	<!-- 	
+	<error-page>
+		<location>/html/error.html</location>
+	</error-page>
+	 -->
+
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+</web-app>

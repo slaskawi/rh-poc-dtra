@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<solver>
+	<environmentMode>FAST_ASSERT</environmentMode>
+	<!-- Domain model configuration -->
+	<solutionClass>mx.redhat.ericsson.dtra.solver.Schedule</solutionClass>
+	<entityClass>mx.redhat.ericsson.dtra.model.EngineerOrTask</entityClass>
+	<entityClass>mx.redhat.ericsson.dtra.model.Task</entityClass>
+	
+	<!-- Score configuration -->
+	<scoreDirectorFactory>
+	  <scoreDefinitionType>HARD_SOFT</scoreDefinitionType>
+	  <scoreDrl>dtraScheduleSolverRules.drl</scoreDrl>
+	</scoreDirectorFactory>
+	
+	<!-- Optimization algorithms configuration -->
+	<termination>
+	  <terminationCompositionStyle>AND</terminationCompositionStyle>
+	  <unimprovedSecondsSpentLimit>10</unimprovedSecondsSpentLimit>
+      <bestScoreLimit>0hard/0soft</bestScoreLimit>
+	</termination>
+	
+	<constructionHeuristic>
+      <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
+  	</constructionHeuristic>
+  	
+  	<localSearch>
+      <acceptor>
+      	<entityTabuSize>7</entityTabuSize>
+      </acceptor>
+      <forager>
+      	<acceptedCountLimit>1000</acceptedCountLimit>
+      </forager>
+  	</localSearch>
+	 
+</solver>

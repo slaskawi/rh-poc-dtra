@@ -2,6 +2,7 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
    <modelVersion>4.0.0</modelVersion>
 
+   <groupId>mx.redhat.ericsson</groupId>
    <artifactId>rh-poc-dtra-parent</artifactId>
    <version>1.0.0</version>
    <packaging>pom</packaging>
@@ -19,40 +20,63 @@
 		<!-- [WARNING] Using platform encoding (UTF-8 actually) to copy filtered
 			resources, i.e. build is platform dependent! -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<!-- JBoss dependency versions -->
-
-		<version.jboss.maven.plugin>7.5.Final</version.jboss.maven.plugin>
-
-		<version.jboss.spec.javaee.6.0>3.0.2.Final-redhat-7</version.jboss.spec.javaee.6.0>
-
-		<version.jdg>6.1.1.Final-redhat-5</version.jdg>
-
-		<version.jboss.bom>1.0.4.Final-redhat-9</version.jboss.bom>
-
-		<!-- other plugin versions -->
-		<version.war.plugin>2.1.1</version.war.plugin>
+		<version.compiler.plugin>2.3.1</version.compiler.plugin>
+		<version.maven-bundle-plugin>2.3.7</version.maven-bundle-plugin>
 
 		<!-- maven-compiler-plugin -->
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<maven.compiler.source>1.7</maven.compiler.source>
+
+		<!-- other plugin versions -->
+		<version.war.plugin>2.1.1</version.war.plugin>
+		
+		<!-- Other dependency versions -->
+        <version.log4j>1.2.17</version.log4j>
+
+		<version.jdg>6.1.1.Final-redhat-5</version.jdg>
+		<version.bpms>6.1.0.GA-redhat-2</version.bpms>
+		<version.eap>6.4.0.GA</version.eap>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
 			<!-- Define the version of JBoss' Java EE 6 APIs we want to use -->
-			<!-- JBoss distributes a complete set of Java EE 6 APIs including a Bill
-				of Materials (BOM). A BOM specifies the versions of a "stack" (or a collection)
-				of artifacts. We use this here so that we always get the correct versions
-				of artifacts. Here we use the jboss-javaee-6.0 stack (you can read this as
-				the JBoss stack of the Java EE 6 APIs). You can actually use this stack with
-				any version of JBoss EAP that implements Java EE 6. -->
 			<dependency>
 				<groupId>org.jboss.bom</groupId>
-				<artifactId>jboss-javaee-6.0-with-hibernate</artifactId>
-				<version>${version.jboss.bom}</version>
+				<artifactId>eap6-supported-artifacts</artifactId>
+				<version>${version.eap}</version>
 				<type>pom</type>
 				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.bom.eap</groupId>
+				<artifactId>jboss-javaee-6.0-with-tools</artifactId>
+				<version>${version.eap}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.bom.eap</groupId>
+				<artifactId>jboss-javaee-6.0-with-hibernate</artifactId>
+				<version>${version.eap}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<!-- 
+			<dependency>
+				<groupId>org.jboss.bom.brms</groupId>
+				<artifactId>jboss-brms-bpmsuite-bom</artifactId>
+				<version>${version.bpms}</version>
+		        <type>pom</type>
+		        <scope>import</scope>
+			</dependency>
+			 -->
+			<dependency>
+				<groupId>mx.redhat.ericsson</groupId>
+				<artifactId>rh-poc-dtra-core</artifactId>
+				<version>1.0.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -68,5 +92,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<groupId>mx.redhat.ericsson</groupId>
 </project>
