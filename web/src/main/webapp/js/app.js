@@ -65,6 +65,10 @@ app.config(function($routeProvider){
 	        controller: "ctrlSolutions",
 	        templateUrl: "pages/solutions.html"
 	    })
+	    .when("/rules", {
+	        controller: "ctrlRules",
+	        templateUrl: "pages/rules.html"
+	    })
 	    .otherwise({
 			redirectTo: '/'
 		});
@@ -140,7 +144,7 @@ app.controller("ctrlSolutions", function($scope, $resource, $interval, Solutions
 	};
 });
 
-app.controller("ctrlEngineers", function($scope, Engineers)
+app.controller("ctrlEngineers", function($scope, $filter, Engineers)
 {
 	$scope.wpg = '7471264-2-M102';
 	
@@ -166,6 +170,169 @@ app.controller("ctrlEngineers", function($scope, Engineers)
 		$scope.solution.engineers = data;
 		$scope.gridOptionsEng.data = $scope.solution.engineers;
 	});
+	
+	$scope.isViewDay = true;
+	$scope.dateAuto = new Date();
+	
+	$scope.today= function()
+	{
+		$scope.dateAuto = new Date();
+		if($scope.isViewDay)
+		{
+			$scope.viewActivitieDay();
+		}else
+			{
+				$scope.viewActivitieWeek();
+			}
+	}
+	$scope.before = function()
+	{
+		if($scope.isViewDay)
+		{
+			var previousDay = -1;
+			$scope.dateAuto.setDate($scope.dateAuto.getDate() + previousDay);
+			$scope.viewActivitieDay();
+		}else
+			{
+				var previousDay = -7;
+				$scope.dateAuto.setDate($scope.dateAuto.getDate() + previousDay);
+				$scope.viewActivitieWeek();
+			}
+		
+	}
+	$scope.after = function()
+	{
+		if($scope.isViewDay)
+		{
+			var nextDay = 1;
+			$scope.dateAuto.setDate($scope.dateAuto.getDate() + nextDay);
+			$scope.viewActivitieDay();
+		}else
+			{
+			var nextDay = 7;
+			$scope.dateAuto.setDate($scope.dateAuto.getDate() + nextDay);
+			$scope.viewActivitieWeek();
+			}
+	}
+	
+	$scope.viewActivitieDay= function()
+	{
+		$scope.isViewDay = true;
+		$scope.tblData = [{id: 'id1', enginner : 'LUIS' + $scope.dateAuto, activitie  : 'ACIVITIE_1', op1 : "active", op2 : "active", op3 : "active", op4 : "active", op5 : "active", op6 : "active", op7 : "", op8 : "", op9 : "", op10 : ""},
+		     			{id: 'id2', enginner : 'LUIS2',activitie : 'ACIVITIE_2', op1 : "active", op2 : "active", op3 : "active", op4 : "active", op5 : "active", op6 : "active", op7 : "", op8 : "", op9 : "", op10 : ""},
+		     			{id: 'id2',enginner : 'LUIS3',activitie : 'ACIVITIE_3', op1 : "active", op2 : "active", op3 : "active", op4 : "active", op5 : "active", op6 : "active", op7 : "", op8 : "", op9 : "", op10 : ""}];
+		$scope.tblSelections = [];
+		$scope.tblColumns = [{ name: 'id', displayName: 'W6KEY', maxWidth: 80 },
+		                     { name: 'enginner', displayName: 'Name Enginnner', minWidth: 300 },
+		                     { name: 'activitie', displayName: 'Task', maxWidth: 85},
+		                     { name: 'op1',  displayName: '09:00'},
+     			             { name: 'op2', displayName: '10:00'},
+     			             { name: 'op3', displayName: '11:00'},
+     			             { name: 'op4', displayName: '12:00'},
+     			             { name: 'op5', displayName: '13:00'},
+     			             { name: 'op6', displayName: '14:00'},
+     			             { name: 'op7', displayName: '15:00'},
+     			             { name: 'op8', displayName: '16:00'},
+     			             { name: 'op9', displayName: '17:00'},
+     			             { name: 'op10', displayName: '18:00'}];
+		$scope.gridOptionsEng = { 
+				data: $scope.tblData, 
+				columnDefs: $scope.tblColumns,
+				selectedItems: $scope.tblSelections,
+				showGridFooter: true,
+				multiSelect: false };
+	}
+	$scope.viewActivitieWeek= function()
+	{
+		$scope.isViewDay = false;
+		
+		$scope.startWeek;
+		$scope.startDay;
+		
+		$scope.dayWeek = $filter('date')(new Date($scope.dateAuto), 'EEEE');
+		$scope.day = $filter('date')(new Date($scope.dateAuto), 'dd');
+		
+		if($scope.dayWeek == 'Monday')
+		{
+			$scope.$startWeek = $scope.dayWeek;  
+			$scope.startDay = $scope.day; 
+		}else
+			if($scope.dayWeek == 'Tuesday')
+			{
+				$scope.$startWeek = 'Monday';
+				$scope.day--;//-1 day
+				$scope.startDay = $scope.day; 
+			}
+			else
+				if($scope.dayWeek == 'Wednesday')
+				{
+					$scope.$startWeek = 'Monday';
+					$scope.day--;$scope.day--;//-2 day
+					$scope.startDay = $scope.day; 
+				}
+				else
+					if($scope.dayWeek == 'Thursday')
+					{
+						$scope.$startWeek = 'Monday';
+						$scope.day--;$scope.day--;$scope.day--;//-3 day
+						$scope.startDay = $scope.day; 
+					}
+					else
+						if($scope.dayWeek == 'Friday')
+						{
+							$scope.$startWeek = 'Monday';
+							$scope.day--;$scope.day--;$scope.day--;$scope.day--;//-4 day
+							$scope.startDay = $scope.day; 
+						}
+						else
+							if($scope.dayWeek == 'Saturday')
+							{
+								$scope.$startWeek = 'Monday';
+								$scope.day--;$scope.day--;$scope.day--;$scope.day--;$scope.day--;//-5 day
+								$scope.startDay = $scope.day; 
+							}
+							else
+								if($scope.dayWeek == 'Sunday')
+								{
+									$scope.$startWeek = 'Monday';
+									$scope.day--;$scope.day--;$scope.day--;$scope.day--;$scope.day--;$scope.day--;//-6 day
+									$scope.startDay = $scope.day; 
+								}
+		
+		$scope.week = $filter('date')(new Date($scope.dateAuto), 'w');
+		
+		$scope.dayIncrement = $scope.startDay;
+		$scope.dayIncrement++;
+		$scope.twoMoreDay = $scope.dayIncrement;
+		$scope.dayIncrement++;
+		$scope.threeMoreDay = $scope.dayIncrement;
+		$scope.dayIncrement++;
+		$scope.fourMoreDay = $scope.dayIncrement;
+		$scope.dayIncrement++;
+		$scope.fiveMoreDay = $scope.dayIncrement;
+		$scope.dayIncrement++;
+		$scope.sixMoreDay = $scope.dayIncrement;
+		$scope.dayIncrement++;
+		$scope.sevenMoreDay = $scope.dayIncrement;
+		
+		$scope.tblData = [{day1 : "LUIS ACIVITIE_1", day2 : $scope.dateAuto, day3 : "", day4 : "", day5 : "", day6 : "", day7 : ""},
+		     			{day1 : "", day2 : "", day3 : "LUIS2 ACIVITIE_2", day4 : "", day5 : "", day6 : "", day7 : ""},
+		     			{day1 : "", day2 : "", day3 : "", day4 : "", day5 : "LUIS3 ACIVITIE_3", day6 : "", day7 : ""}];
+		$scope.tblSelections = [];
+		$scope.tblColumns = [{ name: 'day1',  displayName: $scope.$startWeek + ' ' + $scope.week +'/'+ $scope.startDay},
+		                     { name: 'day2',  displayName: 'Tuesday' + ' ' + $scope.week +'/'+ $scope.twoMoreDay},
+		                     { name: 'day3',  displayName: 'Wednesday' + ' ' + $scope.week +'/'+ $scope.threeMoreDay},
+							 { name: 'day4',  displayName: 'Thursday' + ' ' + $scope.week +'/'+ $scope.fourMoreDay},
+							 { name: 'day5',  displayName: 'Friday' + ' ' + $scope.week +'/'+ $scope.fiveMoreDay},
+							 { name: 'day6',  displayName: 'Saturday' + ' ' + $scope.week +'/'+ $scope.sixMoreDay},
+							 { name: 'day7',  displayName: 'Sunday' + ' ' + $scope.week +'/'+ $scope.sevenMoreDay}];
+		$scope.gridOptionsEng = { 
+				data: $scope.tblData, 
+				columnDefs: $scope.tblColumns,
+				selectedItems: $scope.tblSelections,
+				showGridFooter: true,
+				multiSelect: false };
+	}
 });
 
 app.controller("ctrlTasks", function($scope, Tasks)
@@ -199,6 +366,49 @@ app.controller("ctrlTasks", function($scope, Tasks)
     
     $scope.loadWPG();
 });
+
+app.controller("ctrlRules", function($scope)
+		{
+			$scope.sequence = 12355;
+			$scope.listRules = [{idRule:12345, name:'Base priority revenue', weight: '500'},
+			                    {idRule:12346, name:'Consider Preferred Engineers', weight: '400'},
+			                    {idRule:12347, name:'Minimize Resource Idle Time', weight: '25'},
+			                    {idRule:12348, name:'Prefer appointments', weight: '200'},
+			                    {idRule:12349, name:'Priority by appointment finish', weight: '400'},
+			                    {idRule:12350, name:'Priority by due date', weight: '400'},
+			                    {idRule:12351, name:'Same sites', weight: '75'},
+			                    {idRule:12352, name:'Schedule appointments ASAP', weight: '100'},
+			                    {idRule:12353, name:'Schedule non-appointments ASAP', weight: '100'},
+			                    {idRule:12354, name:'Task Priority', weight: '400'}];
+			$scope.tblSelections = [];
+			$scope.tblColumns = [{ name: 'idRule', displayName: 'Id Rule', maxWidth: 80 },
+			                     { name: 'name', displayName: 'Name Rule', minWidth: 300 },
+			                     { name: 'weight', displayName: 'Weight'}];
+
+			$scope.gridRules = { 
+					data: $scope.listRules, 
+					columnDefs: $scope.tblColumns,
+					selectedItems: $scope.tblSelections,
+					showGridFooter: true,
+					multiSelect: false };
+
+			$scope.save = function()
+			{
+				$scope.listRules.push({idRule:$scope.sequence, name:$scope.rule, weight: $scope.weight});
+				$scope.rule = '';
+				$scope.weight = '';
+				$scope.sequence++;
+			};
+			$scope.edit = function()
+			{
+				console.info($scope.gridRules.selectedItems);
+//				$scope.listRules.push({idRule:$scope.sequence, name:$scope.rule, weight: $scope.weight});
+//				$scope.rule = '';
+//				$scope.weight = '';
+//				$scope.sequence++;
+			};
+		});
+
 
 app.controller("ctrlGeneric", function($scope)
 {
