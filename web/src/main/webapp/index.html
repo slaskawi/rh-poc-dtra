@@ -8,6 +8,8 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
+<link rel="shortcut icon" href="images/favicon.ico"/>
+
 <title>DTRA Scheduling PoC</title>
 
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -18,7 +20,7 @@
 
 <body data-ng-app="myApp">
 
-	<div id="wrapper">
+	<div id="wrapper" data-ng-controller="ctrlMain">
 
 		<!-- Navigation -->
 		<nav class="navbar navbar-default navbar-fixed-top"
@@ -40,8 +42,9 @@
 				<div class="collapse navbar-collapse"
 					id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
-						<li class="active"><a href="#">Home</a></li>
-						<li><a href="#/scheduler">Task Scheduler</a></li>
+						<li data-ng-class="{ active: isActive('/')}"><a href="#">Home</a></li>
+						<li data-ng-class="{ active: isActive('/scheduler')}"><a href="#/scheduler">Task Scheduler</a></li>
+						<li data-ng-class="{ active: isActive('/solutions')}"><a href="#/solutions">Solutions</a></li>
 					</ul>
 				</div>
 			</div>
@@ -49,6 +52,7 @@
 
 		<div class="container">
 
+			<alert ng-repeat="alert in alerts" type="{{alert.type}}" dismiss-on-timeout="5000" close="closeAlert($index)">{{alert.text}}</alert>
 
 			<div data-ng-view></div>
 
@@ -80,8 +84,8 @@
 	
 	<script src="https://cdn.rawgit.com/angular-ui/ui-grid.info/gh-pages/release/3.0.6/ui-grid.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.4/ui-bootstrap.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.4/ui-bootstrap-tpls.min.js"></script>
 
 	<script src="js/app.js"></script>
 

@@ -1,14 +1,33 @@
 package mx.redhat.ericsson.dtra.model;
 
-import java.sql.Timestamp;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
+@Entity
+@Table(schema = "public", name = "engineer")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Engineer implements EngineerOrTask
 {
+	@Id
+	@Column(name = "w6key")	
 	Long id;
-	Timestamp startTime;
+	
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "calendar", referencedColumnName = "w6key")
+	EngineerCalendar calendar;
 	
 	// Shadow variables
+	@Transient
     Task nextTask;
 
 	public Long getId() {
@@ -19,18 +38,19 @@ public class Engineer implements EngineerOrTask
 		this.id = id;
 	}
 
-	public Timestamp getStartTime() {
-		return startTime;
+	public EngineerCalendar getCalendar() {
+		return calendar;
 	}
 
-	public void setStartTime(Timestamp startTime) {
-		this.startTime = startTime;
+	public void setCalendar(EngineerCalendar calendar) {
+		this.calendar = calendar;
 	}
-	
+
 	// ************************************************************************
     // Complex methods
     // ************************************************************************
 	@Override
+	@JsonIgnore
 	public Engineer getEngineer() {
 		return this;
 	}
@@ -44,7 +64,7 @@ public class Engineer implements EngineerOrTask
 	public void setNextTask(Task nextTask) {
 		this.nextTask = nextTask;
 	}
-
+	
 	public String toString() {
 		if (getId() != null) {
 			return String.valueOf(getId());

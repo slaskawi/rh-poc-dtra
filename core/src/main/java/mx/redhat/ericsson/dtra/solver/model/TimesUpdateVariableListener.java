@@ -1,12 +1,20 @@
 package mx.redhat.ericsson.dtra.solver.model;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
+import mx.redhat.ericsson.dtra.model.Engineer;
 import mx.redhat.ericsson.dtra.model.EngineerOrTask;
 import mx.redhat.ericsson.dtra.model.Task;
 
 
 
+
+
+
+
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 //import org.apache.commons.lang.ObjectUtils;
 import org.optaplanner.core.impl.domain.variable.listener.VariableListener;
@@ -69,11 +77,6 @@ public class TimesUpdateVariableListener implements VariableListener<EngineerOrT
             scoreDirector.afterVariableChanged(shadowTask, "startingTime");
 
             Timestamp endTime = calculateEndTime(shadowTask, startTime);
-            // If after time add nightover
-            LocalTime endLocalTime = new LocalTime(endTime);
-            if (new LocalTime(18,0).isBefore(endLocalTime)) {
-            	endTime = new Timestamp(endTime.getTime() + (14 * 60 * 60 * 1000));
-            }
             
             scoreDirector.beforeVariableChanged(shadowTask, "endingTime");
             shadowTask.setEndingTime(endTime);
@@ -83,12 +86,7 @@ public class TimesUpdateVariableListener implements VariableListener<EngineerOrT
             
             shadowTask = shadowTask.getNextTask();
             
-            endTime = calculateEndTime(shadowTask, startTime);
-            // If after time add nightover
-            endLocalTime = new LocalTime(endTime);
-            if (new LocalTime(18,0).isBefore(endLocalTime)) {
-            	endTime = new Timestamp(endTime.getTime() + (14 * 60 * 60 * 1000));
-            }
+            endTime = calculateEndTime(shadowTask, startTime);            
 		}
 	}
 	
@@ -98,8 +96,15 @@ public class TimesUpdateVariableListener implements VariableListener<EngineerOrT
 			return ((Task)previousEngineerOrTask).getEndingTime();
 		}
 		
-		if (sourceTask.getEngineer() != null) {
-			return sourceTask.getEngineer().getStartTime();
+		Engineer engineer = sourceTask.getEngineer();
+		
+		if (engineer != null) 
+		{
+			Date scheduleDay = new LocalDate().toDateTimeAtStartOfDay().toDate();
+			Date engineersStartTime = engineer.getCalendar().getStartingTime(scheduleDay);
+			Timestamp scheduleDayStartTime = new Timestamp(scheduleDay.getTime() + engineersStartTime.getTime());
+
+			return scheduleDayStartTime;
 		}
 		
 		return null;
@@ -111,18 +116,51 @@ public class TimesUpdateVariableListener implements VariableListener<EngineerOrT
 			return null;
 		}
 		
+		Engineer engineer = shadow.getEngineer();
+		
 		if (previousEndTime == null) 
 		{
 			// check if not anchor (engineer)
-			if (shadow.getEngineer() == null) 
+			if (engineer == null) 
 			{
 				return null;//new Date( 0 + (shadow.getDuration() * 1000) );				
 			}
 			
-			return new Timestamp( shadow.getEngineer().getStartTime().getTime() + (shadow.getDuration() * 1000) );			
+			//TODO Does it gets here anyway?
+			return new Timestamp( engineer.getCalendar().getStartingTime(new Date()).getTime() + shadow.getDuration() );			
 		}
 		
-		return new Timestamp( previousEndTime.getTime() + (shadow.getDuration() * 1000) );
+		Timestamp endTime = new Timestamp( previousEndTime.getTime() + shadow.getDuration() );
+		
+		DateTime endTimeDate = new LocalDate(endTime).toDateTimeAtStartOfDay();
+		
+		LocalTime endTimeTime = new DateTime(0).plus(new LocalTime(endTime).getMillisOfDay()).toLocalTime();
+
+		LocalTime engineersLunchStart = new LocalTime(engineer.getCalendar().getLunchStart());
+		LocalTime engineersLunchEnd = new LocalTime(engineer.getCalendar().getLunchEnd());
+		
+		// if between lunch add lunch break
+		if (endTimeTime.isAfter(engineersLunchStart) && endTimeTime.isBefore(engineersLunchEnd)) 
+		{
+			Long lunchBreak = (long)engineersLunchEnd.getMillisOfDay() - engineersLunchStart.getMillisOfDay();
+
+			endTime = new Timestamp(endTime.getTime() + lunchBreak);			
+		}
+		
+		LocalTime engineersEndTime = new LocalTime(engineer.getCalendar().getEndingTime(endTimeDate.toDate()));
+		
+		// If after time add nightover
+		if (endTimeTime.isAfter(engineersEndTime)) 
+		{
+			DateTime nextWorkingDay = endTimeDate.plusDays(1);
+			Date engineersStartTime = engineer.getCalendar().getStartingTime(nextWorkingDay.toDate());
+			
+			Long nightOver = (long)endTimeTime.getMillisOfDay() - engineersEndTime.getMillisOfDay();
+			
+			endTime = new Timestamp(nextWorkingDay.plus(engineersStartTime.getTime()).plus(nightOver).toDate().getTime());
+		}            	
+		
+		return endTime;
 	}
 
 }

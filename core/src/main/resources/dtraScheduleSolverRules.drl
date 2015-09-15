@@ -33,7 +33,7 @@ end
 
 rule "afterDueDate"
     when
-        $a : Task(dueDate < endingTime)
+        $a : Task(endingTime after[1d] dueDate)
     then
         scoreHolder.addSoftConstraintMatch(kcontext, -1);
 end

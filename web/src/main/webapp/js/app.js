@@ -2,6 +2,18 @@
 
 var ws = angular.module('myApp.services',[]);
 
+ws.factory('Solutions', ['$resource', function($resource){
+	return {
+		list: function(callback) {
+			var api = $resource("application/scheduler/solutions",{});
+
+			api.query({}, function(response){
+				callback(response);
+			});
+		}
+	};
+}]);
+
 ws.factory('Tasks', ['$resource', function($resource){
 	return {
 		listByWPG: function(wpg, callback) {
@@ -14,8 +26,21 @@ ws.factory('Tasks', ['$resource', function($resource){
 	};
 }]);
 
+ws.factory('Engineers', ['$resource', function($resource){
+	return {
+		list: function(callback) {
+			var api = $resource("application/scheduler/engineers",{});
+
+			api.query({}, function(response){
+				callback(response);
+			});
+		}
+	};
+}]);
+
 
 var app = angular.module("myApp", ['ngCookies',
+                                   'ngAnimate',
                                    'ngResource',
                                    'ngSanitize',
                                    'ngRoute',
@@ -23,6 +48,7 @@ var app = angular.module("myApp", ['ngCookies',
                                    'ui.grid',
                                    'ui.grid.selection',
                                    'ui.grid.resizeColumns',
+                                   'ui.grid.autoResize',
                                    'myApp.services']);
 
 app.config(function($routeProvider){
@@ -35,22 +61,92 @@ app.config(function($routeProvider){
 	        controller: "ctrlScheduler",
 	        templateUrl: "pages/scheduler.html"
 	    })
+	    .when("/solutions", {
+	        controller: "ctrlSolutions",
+	        templateUrl: "pages/solutions.html"
+	    })
 	    .otherwise({
 			redirectTo: '/'
 		});
 })
 
-app.controller("ctrlScheduler", function($scope)
+app.controller("ctrlMain", function($scope, $location)
 {
+	$scope.alerts = [];
+	
+	$scope.isActive = function (viewLocation) { 
+        return viewLocation === $location.path();
+    };	
+
+    $scope.closeAlert = function(index) {
+		$scope.alerts.splice(index, 1);
+	};
 });
 
-app.controller("ctrlEngineers", function($scope)
+app.controller("ctrlScheduler", function($scope, $resource)
+{
+	$scope.schedule = function (){
+		var api = $resource("application/scheduler/solve",{});
+
+		api.save( { engineerList : $scope.solution.engineers, taskList : $scope.solution.tasks }, function(response){
+			$scope.alerts.push(response);
+		});
+	};
+	
+	$scope.solution = { tasks : [], engineers : [] };
+	
+});
+
+app.controller("ctrlSolutions", function($scope, $resource, $interval, Solutions)
+{
+	$scope.tblData = [{id:39890558, hardScore : 0, softScore : -15, feasible : true}];
+	$scope.tblSelections = [];
+	$scope.tblColumns = [{ name: 'id', displayName: 'Solution', maxWidth: 100 },
+	                     { name: 'score.hardScore', displayName: 'Hard' },
+	                     { name: 'score.softScore', displayName: 'Soft' },
+	                     { name: 'score.feasible', displayName: 'Feasible'},
+	                     { name: 'timestamp', displayName: 'Created On'}];
+
+	$scope.gridOptionsSolutions = { 
+			data: $scope.tblData, 
+			columnDefs: $scope.tblColumns,
+			selectedItems: $scope.tblSelections,
+			showGridFooter: true,
+			multiSelect: false };
+	
+	var stop = $interval(function() {
+		Solutions.list(function(data){
+			$scope.gridOptionsSolutions.data = data;
+		});		
+	}, 1000);
+	
+	$scope.$on('$destroy', function() {
+        $scope.stop();
+    });
+	
+	$scope.stop = function() {
+        if (angular.isDefined(stop)) {
+          $interval.cancel(stop);
+          stop = undefined;
+        }
+    };
+	
+	$scope.terminate = function (){
+		var api = $resource("application/scheduler/terminateEarly",{});
+
+		api.save({}, function(response){
+			$scope.alerts.push(response);
+		});
+	};
+});
+
+app.controller("ctrlEngineers", function($scope, Engineers)
 {
 	$scope.wpg = '7471264-2-M102';
 	
-	$scope.tblData = [{w6key:39890558, actname:'Upload and processing FMT File in TIPP tool', duration:2376000}];
+	$scope.tblData = [{id:39890558}];
 	$scope.tblSelections = [];
-	$scope.tblColumns = [{ name: 'id', displayName: 'W6KEY', maxWidth: 80 },
+	$scope.tblColumns = [{ name: 'id', displayName: 'W6KEY', maxWidth: 100 },
 	                     { name: 'actname', displayName: 'Name', minWidth: 300 },
 	                     { name: 'duration', displayName: 'Duration', maxWidth: 85, cellFilter: 'date : \'HH:mm:ss\' : \'GMT\'' },
 	                     //{ name: 'priority', displayName: 'Priority' },
@@ -65,7 +161,11 @@ app.controller("ctrlEngineers", function($scope)
 			selectedItems: $scope.tblSelections,
 			showGridFooter: true,
 			multiSelect: false };
-
+	
+	Engineers.list(function(data) {
+		$scope.solution.engineers = data;
+		$scope.gridOptionsEng.data = $scope.solution.engineers;
+	});
 });
 
 app.controller("ctrlTasks", function($scope, Tasks)
@@ -90,107 +190,17 @@ app.controller("ctrlTasks", function($scope, Tasks)
 			showGridFooter: true,
 			multiSelect: false };
 
-	Tasks.listByWPG($scope.wpg, function(data) {
-		$scope.gridOptionsTasks.data = data;
-	});
-	
 	$scope.loadWPG = function() {
 		Tasks.listByWPG($scope.wpg, function(data) {
-			$scope.gridOptionsTasks.data = data;
+			$scope.solution.tasks = data;
+			$scope.gridOptionsTasks.data = $scope.solution.tasks;
 		});
     };
+    
+    $scope.loadWPG();
 });
 
 app.controller("ctrlGeneric", function($scope)
 {
-	$scope.listEngineers = [ 
-			{NAME : 'LUIS',LASTNAME : 'GONZALEZ'},
-			{NAME : 'LUIS2',LASTNAME : 'GONZALEZ'}, 
-			{NAME : 'LUIS3',LASTNAME : 'GONZALEZ'}, 
-			{NAME : 'LUIS4',LASTNAME : 'GONZALEZ'}, 
-			{NAME : 'LUIS5',LASTNAME : 'GONZALEZ'}, 
-			{NAME : 'LUIS6',LASTNAME : 'GONZALEZ'}, 
-			{NAME : 'LUIS7',LASTNAME : 'GONZALEZ'}, 
-			{NAME : 'LUIS8',LASTNAME : 'GONZALEZ'},
-			{NAME : 'LUIS9',LASTNAME : 'GONZALEZ'},
-			{NAME : 'LUIS10',LASTNAME : 'GONZALEZ'},
-			{NAME : 'LUIS11',LASTNAME : 'GONZALEZ'},
-			{NAME : 'LUIS12',LASTNAME : 'GONZALEZ'},
-			{NAME : 'LUIS13',LASTNAME : 'GONZALEZ'},
-			{NAME : 'LUIS14',LASTNAME : 'GONZALEZ'},
-			{NAME : 'LUIS15',LASTNAME : 'GONZALEZ'},
-			{NAME : 'LUIS16',LASTNAME : 'GONZALEZ'},
-			{NAME : 'LUIS17',LASTNAME : 'GONZALEZ'},
-			{NAME : 'LUIS18',LASTNAME : 'GONZALEZ'},
-			{NAME : 'LUIS19',LASTNAME : 'GONZALEZ'},
-			{NAME : 'LUIS20',LASTNAME : 'GONZALEZ'},
-			{NAME : 'LUIS21',LASTNAME : 'GONZALEZ'},
-			{NAME : 'LUIS22',LASTNAME : 'GONZALEZ'},
-			{NAME : 'LUIS23',LASTNAME : 'GONZALEZ'}];
-    $scope.gridEngineers = { data: 'listEngineers' };
-			
-	$scope.listActivitiesAssigned = [ 
-			{enginner : 'LUIS',activitie : 'ACIVITIE_1', op1 : "active", op2 : "active", op3 : "active", op4 : "active", op5 : "active", op6 : "active", op7 : "", op8 : "", op9 : "", op10 : ""},
-			{enginner : 'LUIS2',activitie : 'ACIVITIE_2', op1 : "active", op2 : "active", op3 : "active", op4 : "active", op5 : "active", op6 : "active", op7 : "", op8 : "", op9 : "", op10 : ""},
-			{enginner : 'LUIS3',activitie : 'ACIVITIE_3', op1 : "active", op2 : "active", op3 : "active", op4 : "active", op5 : "active", op6 : "active", op7 : "", op8 : "", op9 : "", op10 : ""},
-			{enginner : 'LUIS4',activitie : 'ACIVITIE_4', op1 : "active", op2 : "active", op3 : "active", op4 : "active", op5 : "active", op6 : "active", op7 : "", op8 : "", op9 : "", op10 : ""},
-			{enginner : 'LUIS5',activitie : 'ACIVITIE_5', op1 : "active", op2 : "active", op3 : "", op4 : "", op5 : "", op6 : "", op7 : "", op8 : "", op9 : "", op10 : ""},
-			{enginner : 'LUIS5',activitie : 'ACIVITIE_5', op1 : "", op2 : "", op3 : "active", op4 : "active", op5 : "", op6 : "", op7 : "", op8 : "", op9 : "", op10 : ""},
-			{enginner : 'LUIS5',activitie : 'ACIVITIE_5', op1 : "", op2 : "", op3 : "", op4 : "", op5 : "active", op6 : "active", op7 : "active", op8 : "active", op9 : "active", op10 : "active"},
-			{enginner : 'LUIS6',activitie : 'ACIVITIE_1', op1 : "active", op2 : "active", op3 : "active", op4 : "active", op5 : "active", op6 : "active", op7 : "", op8 : "", op9 : "", op10 : ""},
-			{enginner : 'LUIS7',activitie : 'ACIVITIE_1', op1 : "active", op2 : "active", op3 : "active", op4 : "active", op5 : "active", op6 : "active", op7 : "", op8 : "", op9 : "", op10 : ""},
-			{enginner : 'LUIS7',activitie : 'ACIVITIE_1', op1 : "active", op2 : "active", op3 : "active", op4 : "active", op5 : "active", op6 : "active", op7 : "", op8 : "", op9 : "", op10 : ""},
-			{enginner : 'LUIS8',activitie : 'ACIVITIE_1', op1 : "active", op2 : "active", op3 : "active", op4 : "active", op5 : "active", op6 : "active", op7 : "", op8 : "", op9 : "", op10 : ""},
-			{enginner : 'LUIS9',activitie : 'ACIVITIE_1', op1 : "active", op2 : "active", op3 : "active", op4 : "active", op5 : "active", op6 : "active", op7 : "", op8 : "", op9 : "", op10 : ""},
-			{enginner : 'LUIS10',activitie : 'ACIVITIE_1', op1 : "active", op2 : "active", op3 : "active", op4 : "active", op5 : "active", op6 : "active", op7 : "", op8 : "", op9 : "", op10 : ""},
-			{enginner : 'LUIS11',activitie : 'ACIVITIE_1', op1 : "active", op2 : "active", op3 : "active", op4 : "active", op5 : "active", op6 : "active", op7 : "", op8 : "", op9 : "", op10 : ""},
-			{enginner : 'LUIS12',activitie : 'ACIVITIE_1', op1 : "active", op2 : "active", op3 : "active", op4 : "active", op5 : "active", op6 : "active", op7 : "", op8 : "", op9 : "", op10 : ""},
-			{enginner : 'LUIS12',activitie : 'ACIVITIE_1', op1 : "active", op2 : "active", op3 : "active", op4 : "active", op5 : "active", op6 : "active", op7 : "", op8 : "", op9 : "", op10 : ""},
-			{enginner : 'LUIS12',activitie : 'ACIVITIE_1', op1 : "active", op2 : "active", op3 : "active", op4 : "active", op5 : "active", op6 : "active", op7 : "", op8 : "", op9 : "", op10 : ""},
-			{enginner : 'LUIS13',activitie : 'ACIVITIE_1', op1 : "active", op2 : "active", op3 : "active", op4 : "active", op5 : "active", op6 : "active", op7 : "", op8 : "", op9 : "", op10 : ""},
-			{enginner : 'LUIS14',activitie : 'ACIVITIE_1', op1 : "active", op2 : "active", op3 : "active", op4 : "active", op5 : "active", op6 : "active", op7 : "", op8 : "", op9 : "", op10 : ""},
-			{enginner : 'LUIS15',activitie : 'ACIVITIE_1', op1 : "active", op2 : "active", op3 : "active", op4 : "active", op5 : "active", op6 : "active", op7 : "", op8 : "", op9 : "", op10 : ""}];
-	$scope.gridActivitiesAssigned = 
-    	{
-			data: 'listActivitiesAssigned',
-			enablePaging: true,
-			showFooter: true,
-			columnDefs: [
-			             { field: 'enginner', displayName: 'ENGINEER NAME'},
-			             { field: 'activitie',   displayName: 'ACTIVITIE NAME'},
-			             { field: 'op1',  displayName: '09:00'},
-			             { field: 'op2', displayName: '10:00'},
-			             { field: 'op3', displayName: '11:00'},
-			             { field: 'op4', displayName: '12:00'},
-			             { field: 'op5', displayName: '13:00'},
-			             { field: 'op6', displayName: '14:00'},
-			             { field: 'op7', displayName: '15:00'},
-			             { field: 'op8', displayName: '16:00'},
-			             { field: 'op9', displayName: '17:00'},
-			             { field: 'op10', displayName: '18:00'},
-			           ],
-           filterOptions: {filterText: '', useExternalFilter: false},
-           showFilter: true
-			//enablePinning: true,
-	        //columnDefs: [{ field: "ENGINEER_NAME", pinned: true,field: "activitie" }]
-    	};
-    	
-		$scope.myData = [{name: "Moroni", age: 50},
-	                     {name: "Tiancum", age: 43},
-	                     {name: "Jacob", age: 27},
-	                     {name: "Nephi", age: 29},
-	                     {name: "Enos", age: 34}];
-	    $scope.gridOptions = { data: 'myData' };				
+	
 });
-
-app.controller('myCtrlScroll', ['$scope', '$location', '$anchorScroll',
-	function ($scope, $location, $anchorScroll) 
-	{
-		$scope.gotoBottom = function(){
-     	// set the location.hash to the id of
-		// the element you wish to scroll to.
-	    $location.hash('bottom');
-	    // call $anchorScroll()
-		$anchorScroll();
-		};	
-  }]);

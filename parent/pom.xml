@@ -35,7 +35,7 @@
 		<!-- Other dependency versions -->
         <version.log4j>1.2.17</version.log4j>
 
-		<version.jdg>6.1.1.Final-redhat-5</version.jdg>
+		<version.jdg>6.3.0.Final-redhat-5</version.jdg>
 		<version.bpms>6.1.0.GA-redhat-2</version.bpms>
 		<version.eap>6.4.0.GA</version.eap>
 	</properties>
@@ -73,6 +73,13 @@
 		        <scope>import</scope>
 			</dependency>
 			 -->
+			<dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-bom</artifactId>
+                <version>${version.jdg}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 			<dependency>
 				<groupId>mx.redhat.ericsson</groupId>
 				<artifactId>rh-poc-dtra-core</artifactId>

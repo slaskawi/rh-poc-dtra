@@ -1,5 +1,6 @@
 package mx.redhat.ericsson.dtra.solver;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -16,14 +17,33 @@ import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 @PlanningSolution
 public class Schedule implements Solution<HardSoftScore> 
 {
+	Long id;
+	Timestamp timestamp;
+	
 	// Problem facts
-	private List<Engineer> engineerList;
+	List<Engineer> engineerList;
 	
 	// Planning entities
-	private List<Task> taskList;
+	List<Task> taskList;
 	
-	private HardSoftScore score;
+	HardSoftScore score;
 	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Timestamp getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Timestamp timestamp) {
+		this.timestamp = timestamp;
+	}
+
 	@PlanningEntityCollectionProperty
     @ValueRangeProvider(id = "engineerRange")
     public List<Engineer> getEngineerList() {

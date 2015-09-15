@@ -11,22 +11,27 @@ import javax.persistence.Transient;
 import mx.redhat.ericsson.dtra.solver.model.NoopVariableListener;
 import mx.redhat.ericsson.dtra.solver.model.TimesUpdateVariableListener;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.hibernate.annotations.Formula;
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.variable.AnchorShadowVariable;
 import org.optaplanner.core.api.domain.variable.CustomShadowVariable;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
 import org.optaplanner.core.api.domain.variable.PlanningVariableGraphType;
 
-@PlanningEntity
 @Entity
 @Table(schema = "public", name = "activity")
+@PlanningEntity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Task implements EngineerOrTask 
 {
 	@Id
 	@Column(name = "w6key")
 	Long id;
 	String actname;
-	Integer duration;
+	@Formula(value = "duration * 1000")
+	Long duration;
 	Timestamp earlyStart;
 	Timestamp lateStart;
 	Timestamp dueDate;
@@ -35,10 +40,12 @@ public class Task implements EngineerOrTask
 	
 	// Planning variables: changes during planning, between score calculations.
 	@Transient
+	@JsonIgnore
 	EngineerOrTask previousEngineerOrTask;
 	
 	// Shadow variables
 	@Transient
+	@JsonIgnore
 	Engineer engineer;
 	@Transient
 	Task nextTask;
@@ -52,16 +59,16 @@ public class Task implements EngineerOrTask
 		return id;
 	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getActname() {
 		return actname;
 	}
 
 	public void setActname(String actname) {
 		this.actname = actname;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public Timestamp getDueDate() {
@@ -88,11 +95,11 @@ public class Task implements EngineerOrTask
 		this.workpackagegroup = workpackagegroup;
 	}
 
-	public Integer getDuration() {
+	public Long getDuration() {
 		return duration;
 	}
 
-	public void setDuration(Integer duration) {
+	public void setDuration(Long duration) {
 		this.duration = duration;
 	}
 

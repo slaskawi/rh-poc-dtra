@@ -15,7 +15,7 @@
 	<!-- Optimization algorithms configuration -->
 	<termination>
 	  <terminationCompositionStyle>AND</terminationCompositionStyle>
-	  <unimprovedSecondsSpentLimit>10</unimprovedSecondsSpentLimit>
+	  <unimprovedSecondsSpentLimit>30</unimprovedSecondsSpentLimit>
       <bestScoreLimit>0hard/0soft</bestScoreLimit>
 	</termination>
 	
