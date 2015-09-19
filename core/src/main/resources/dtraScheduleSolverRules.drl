@@ -32,11 +32,27 @@ end
 // Soft constraints
 // ############################################################################
 
-rule "afterDueDate"
+rule "priorityByAppointmentFinish" // afterDueDate - 400pts - 
     when
         $a : Task(endingTime after[1d] dueDate)
     then
         scoreHolder.addSoftConstraintMatch(kcontext, -10l);
+end
+
+rule "priorityByDueDate" // closeToDueDate - 400pts - 
+	when
+		Task($end : endingTime != null, $due : dueDate, dueDate after endingTime)
+	then
+		long p = ( ($due.getTime() - $end.getTime()) / ( 86400000l ) );
+		scoreHolder.addSoftConstraintMatch(kcontext, -1000l / p );
+end
+
+rule "ScheduleAppointmentsASAP" // - closeToEarlyStart - 100pts
+	when
+		Task($start : startingTime != null, $early : earlyStart, startingTime after earlyStart)
+	then
+		long p = ( ($start.getTime() - $early.getTime()) / ( 86400000l ) );
+		scoreHolder.addSoftConstraintMatch(kcontext, -p );
 end
 
 rule "beforeEarlyDate"
@@ -53,18 +69,3 @@ rule "afterLateStart"
         scoreHolder.addSoftConstraintMatch(kcontext, -1l);
 end
 
-rule "ScheduleAppointmentsASAP"
-	when
-		Task($start : startingTime != null, $early : earlyStart, startingTime after earlyStart)
-	then
-		long p = ( ($start.getTime() - $early.getTime()) / ( 1000l ) );
-		scoreHolder.addSoftConstraintMatch(kcontext, -p );
-end
-
-rule "priorityByDueDate"
-	when
-		Task($end : endingTime != null, $due : dueDate, dueDate after endingTime)
-	then
-		long p = ( ($due.getTime() - $end.getTime()) / ( 1000l ) );
-		scoreHolder.addSoftConstraintMatch(kcontext, -1000000l / p );
-end
