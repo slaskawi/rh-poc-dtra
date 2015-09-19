@@ -8,22 +8,21 @@
 	
 	<!-- Score configuration -->
 	<scoreDirectorFactory>
-	  <scoreDefinitionType>HARD_SOFT</scoreDefinitionType>
+	  <scoreDefinitionType>HARD_SOFT_LONG</scoreDefinitionType>
 	  <scoreDrl>dtraScheduleSolverRules.drl</scoreDrl>
 	</scoreDirectorFactory>
 	
 	<!-- Optimization algorithms configuration -->
-	<termination>
-	  <terminationCompositionStyle>AND</terminationCompositionStyle>
-	  <unimprovedSecondsSpentLimit>30</unimprovedSecondsSpentLimit>
-      <bestScoreLimit>0hard/0soft</bestScoreLimit>
-	</termination>
-	
 	<constructionHeuristic>
       <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
   	</constructionHeuristic>
   	
   	<localSearch>
+	  <termination>
+	    <terminationCompositionStyle>OR</terminationCompositionStyle>
+	    <unimprovedSecondsSpentLimit>60</unimprovedSecondsSpentLimit>
+        <bestScoreLimit>0hard/0soft</bestScoreLimit>
+	  </termination>
       <acceptor>
       	<entityTabuSize>7</entityTabuSize>
       </acceptor>

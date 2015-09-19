@@ -3,14 +3,15 @@ package mx.redhat.ericsson.dtra;
 	dialect "java"
 
 //list any import classes here.
-import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScoreHolder;
+import org.optaplanner.core.api.score.buildin.hardsoftlong.HardSoftLongScoreHolder;
 
 import mx.redhat.ericsson.dtra.model.Task;
 import mx.redhat.ericsson.dtra.model.Engineer;
+import java.lang.Math;
 
 
 //declare any global variables here
-global HardSoftScoreHolder scoreHolder;
+global HardSoftLongScoreHolder scoreHolder;
 
 
 // ############################################################################
@@ -23,7 +24,7 @@ rule "unassignedTask"
     when
         $a : Task( engineer == null )
     then
-        scoreHolder.addHardConstraintMatch(kcontext, -1);
+        scoreHolder.addHardConstraintMatch(kcontext, -1l);
 end
 
 
@@ -35,14 +36,35 @@ rule "afterDueDate"
     when
         $a : Task(endingTime after[1d] dueDate)
     then
-        scoreHolder.addSoftConstraintMatch(kcontext, -1);
+        scoreHolder.addSoftConstraintMatch(kcontext, -10l);
 end
 
-/*
 rule "beforeEarlyDate"
     when
-        $a : Task(earlyStart > startingTime)
+        $a : Task(startingTime before earlyStart)
     then
-        scoreHolder.addSoftConstraintMatch(kcontext, -1);
+        scoreHolder.addSoftConstraintMatch(kcontext, -1l);
 end
-*/
+
+rule "afterLateStart"
+    when
+        $a : Task(startingTime after[1d] lateStart)
+    then
+        scoreHolder.addSoftConstraintMatch(kcontext, -1l);
+end
+
+rule "ScheduleAppointmentsASAP"
+	when
+		Task($start : startingTime != null, $early : earlyStart, startingTime after earlyStart)
+	then
+		long p = ( ($start.getTime() - $early.getTime()) / ( 1000l ) );
+		scoreHolder.addSoftConstraintMatch(kcontext, -p );
+end
+
+rule "priorityByDueDate"
+	when
+		Task($end : endingTime != null, $due : dueDate, dueDate after endingTime)
+	then
+		long p = ( ($due.getTime() - $end.getTime()) / ( 1000l ) );
+		scoreHolder.addSoftConstraintMatch(kcontext, -1000000l / p );
+end

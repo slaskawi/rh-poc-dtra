@@ -13,6 +13,7 @@ import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import mx.redhat.ericsson.dtra.model.WorkingDay.Day;
@@ -99,9 +100,41 @@ public class EngineerCalendar
 		// TODO Use Day enum
 		WorkingDay wDay = workingDays.get(dayOfWeek);//Day.getType(day));
 		if (wDay == null) {
-			// TODO create default calendar day
-			return null;
+			// not working day, return next working date
+			if (dayOfWeek > 7) {
+				return getEndingTime(1);
+			}
+			return getEndingTime(++dayOfWeek);
 		}
 		return wDay.getEndTime();
+	}
+	
+	public boolean isWorkingDay(Date date)
+	{
+		Integer day = LocalDate.fromDateFields(date).getDayOfWeek();
+		return workingDays.containsKey(day);
+	}
+
+	public Date getNextWorkingDay(Date date) {
+		Integer day = LocalDate.fromDateFields(date).getDayOfWeek();
+		Integer nextWorkingDay = getNextWorkingDay(day);
+		if (nextWorkingDay < day) {
+			return new Timestamp(new DateTime(date).plusDays((nextWorkingDay + 7) - day).toDate().getTime());
+		}
+		return new Timestamp(new DateTime(date).plusDays(nextWorkingDay - day).toDate().getTime());
+	}
+
+	public Integer getNextWorkingDay(Integer dayOfWeek) 
+	{
+		// TODO Use Day enum
+		WorkingDay wDay = workingDays.get(++dayOfWeek);//Day.getType(day));
+		if (wDay == null) {
+			// not working day, return next working date
+			if (dayOfWeek > 7) {
+				return getNextWorkingDay(0);
+			}
+			return getNextWorkingDay(dayOfWeek);
+		}
+		return dayOfWeek;
 	}
 }

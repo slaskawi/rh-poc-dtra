@@ -21,6 +21,12 @@ public class Engineer implements EngineerOrTask
 	@Column(name = "w6key")	
 	Long id;
 	
+	String gsc;
+	String unit;
+	String subunit;
+	String region;
+	String disctrict;
+	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "calendar", referencedColumnName = "w6key")
@@ -36,6 +42,46 @@ public class Engineer implements EngineerOrTask
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getGsc() {
+		return gsc;
+	}
+
+	public void setGsc(String gsc) {
+		this.gsc = gsc;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
+	public String getSubunit() {
+		return subunit;
+	}
+
+	public void setSubunit(String subunit) {
+		this.subunit = subunit;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	public String getDisctrict() {
+		return disctrict;
+	}
+
+	public void setDisctrict(String disctrict) {
+		this.disctrict = disctrict;
 	}
 
 	public EngineerCalendar getCalendar() {

@@ -1,3 +1,34 @@
+<div data-ng-controller="ctrlEngineers">
+	<div>
+		<table width="100%">
+			<tr>
+				<td align="left">
+					<button class="btn btn-success" ng-click="viewActivitieDay()">DAY</button>
+					<button class="btn btn-success" ng-click="viewActivitieWeek()">WEEK</button> <!-- <button class="btn btn-success">MOUNTH</button>  -->
+				</td>
+				<td align="right"><h1>TASK</h1></td>
+			</tr>
+			<tr>
+				<td width="50%" align="left"><h3 ng-bind="dateAuto | date:'fullDate'"></h3></td>
+				<td width="50%" align="right">
+					<button class="btn btn-primary" ng-click="today()">TODAY</button>
+					<button class="btn btn-warning" ng-click="before()"><</button>
+					<button class="btn btn-warning" ng-click="after()">></button>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<div class="col-md-12 col-lg-12">
+			<div id="gridEng" data-ui-grid="gridOptionsEng"
+				class="grid-engineers" data-ui-grid-selection
+				data-ui-grid-resize-columns></div>
+		</div>
+	</div>
+</div>
+
+<hr>
+
 <div data-ng-controller="ctrlTasks">
 
 	<div class="row">
@@ -21,7 +52,7 @@
 			</form>
 		</div>
 		<div class="col-md-2 col-lg-2">
-			<button class="btn btn-lg btn-primary" data-ng-click="schedule()">Schedule</button>
+			<button class="btn btn-lg btn-primary pull-right" data-ng-click="schedule()">Schedule</button>
 		</div>
 	</div>
 	

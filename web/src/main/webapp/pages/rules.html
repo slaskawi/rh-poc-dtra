@@ -1,0 +1,47 @@
+<form name="myForm" novalidate>
+	<div data-ng-controller="ctrlRules">
+		<div class="panel panel-success">
+			<div class="panel-heading">
+				<h5>Rules</h5>
+			</div>
+			<div class="panel-body">
+				<!-- <div class="gridStyleBannerBoot" ng-grid="gridActivitiesUnAssigned"></div>  -->
+				<table>
+					<tr>
+						<td>
+						<td><label>Rule: </label></td>
+						<td><input type="text" name="rule" ng-model="rule" required>
+							<span style="color: red"
+							ng-show="myForm.rule.$dirty && myForm.rule.$invalid"> <span
+								ng-show="myForm.rule.$error.required">Rule is required.</span>
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+						<td><label>Weight: </label></td>
+						<td> <input type="number" name="weight" ng-model="weight" min="0" max="10000" required>
+							<span style="color: red" ng-show="myForm.weight.$dirty && myForm.weight.$invalid">
+							<span ng-show="myForm.weight.$error.required">Weight is required.</span>
+							<span ng-show="myForm.weight.$error.number">Weight is numeric.</span>
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" align="left"><br> 
+							<input type="submit" value="Save Rule" class="btn btn-primary btn-lg" ng-click="save()"
+							ng-disabled="myForm.rule.$dirty && myForm.rule.$invalid || myForm.weight.$dirty && myForm.weight.$invalid"></td>
+						<td colspan="2" align="left"><br> 
+							<input type="submit" value="Update Rule" class="btn btn-primary btn-lg" ng-click="edit()">
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 col-lg-12">
+				<div id="gridRule" data-ui-grid="gridRules" class="grid-engineers"
+					data-ui-grid-selection data-ui-grid-resize-columns></div>
+			</div>
+		</div>
+	</div>
+</form>

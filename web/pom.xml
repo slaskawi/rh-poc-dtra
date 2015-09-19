@@ -112,6 +112,7 @@
 			<groupId>mx.redhat.ericsson</groupId>
 			<artifactId>rh-poc-dtra-core</artifactId>
 		</dependency>
+		
 	</dependencies>
 
 	<build>
@@ -129,26 +130,6 @@
 				</configuration>
 			</plugin>
 			<!-- JBoss AS plugin to deploy war -->
-			<plugin>
-				<!-- The JBoss AS plugin deploys your war to a local JBoss AS container -->
-				<!-- To use, run: mvn package jboss-as:deploy -->
-				<groupId>org.jboss.as.plugins</groupId>
-				<artifactId>jboss-as-maven-plugin</artifactId>
-				<version>${version.jboss.maven.plugin}</version>
-				<configuration>
-					<domain>
-                        <server-groups>
-                            <server-group>coppel</server-group>
-                        </server-groups>
-                    </domain>
-					<hostname>10.17.48.56</hostname>
-					<port>9999</port>
-					<username>admin</username>
-					<password>Redhat1!</password>
-					<!-- <jbossHome>/r/jboss-datagrid/jboss-datagrid-6.2.1-server/</jbossHome> -->
-					<!-- <serverName>all</serverName> -->
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 

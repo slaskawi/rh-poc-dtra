@@ -245,11 +245,11 @@ public class SchedulerSolverBean implements ScheduleSolver
 		
 		Root<Engineer> task = cq.from(Engineer.class);
 		
-		cq.select(task);
+		cq.select(task).where(cb.equal(task.get("calendar"), 50405377));
 		
 		TypedQuery<Engineer> tq = em.createQuery(cq);
 		
-		tq.setMaxResults(5);
+//		tq.setMaxResults(5);
 		
 		List<Engineer> engineers = tq.getResultList();
 		

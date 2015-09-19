@@ -100,7 +100,9 @@ public class TimesUpdateVariableListener implements VariableListener<EngineerOrT
 		
 		if (engineer != null) 
 		{
-			Date scheduleDay = new LocalDate().toDateTimeAtStartOfDay().toDate();
+			Date pivotDate = new LocalDate(2015,8,1).toDateTimeAtStartOfDay().toDate();
+			
+			Date scheduleDay = engineer.getCalendar().isWorkingDay(pivotDate) ? pivotDate : engineer.getCalendar().getNextWorkingDay(pivotDate);
 			Date engineersStartTime = engineer.getCalendar().getStartingTime(scheduleDay);
 			Timestamp scheduleDayStartTime = new Timestamp(scheduleDay.getTime() + engineersStartTime.getTime());
 
@@ -130,6 +132,8 @@ public class TimesUpdateVariableListener implements VariableListener<EngineerOrT
 			return new Timestamp( engineer.getCalendar().getStartingTime(new Date()).getTime() + shadow.getDuration() );			
 		}
 		
+		LocalTime previousEndTimeTime = new DateTime(0).plus(new LocalTime(previousEndTime).getMillisOfDay()).toLocalTime();
+		
 		Timestamp endTime = new Timestamp( previousEndTime.getTime() + shadow.getDuration() );
 		
 		DateTime endTimeDate = new LocalDate(endTime).toDateTimeAtStartOfDay();
@@ -140,7 +144,8 @@ public class TimesUpdateVariableListener implements VariableListener<EngineerOrT
 		LocalTime engineersLunchEnd = new LocalTime(engineer.getCalendar().getLunchEnd());
 		
 		// if between lunch add lunch break
-		if (endTimeTime.isAfter(engineersLunchStart) && endTimeTime.isBefore(engineersLunchEnd)) 
+		if (endTimeTime.isAfter(engineersLunchStart) && endTimeTime.isBefore(engineersLunchEnd) ||
+				previousEndTimeTime.isBefore(engineersLunchStart) && endTimeTime.isAfter(engineersLunchEnd)) 
 		{
 			Long lunchBreak = (long)engineersLunchEnd.getMillisOfDay() - engineersLunchStart.getMillisOfDay();
 
@@ -152,12 +157,12 @@ public class TimesUpdateVariableListener implements VariableListener<EngineerOrT
 		// If after time add nightover
 		if (endTimeTime.isAfter(engineersEndTime)) 
 		{
-			DateTime nextWorkingDay = endTimeDate.plusDays(1);
-			Date engineersStartTime = engineer.getCalendar().getStartingTime(nextWorkingDay.toDate());
+			Date nextWorkingDay = engineer.getCalendar().getNextWorkingDay(endTimeDate.toDate());//endTimeDate.plusDays(1);
+			Date engineersStartTime = engineer.getCalendar().getStartingTime(nextWorkingDay);
 			
 			Long nightOver = (long)endTimeTime.getMillisOfDay() - engineersEndTime.getMillisOfDay();
 			
-			endTime = new Timestamp(nextWorkingDay.plus(engineersStartTime.getTime()).plus(nightOver).toDate().getTime());
+			endTime = new Timestamp(new DateTime(nextWorkingDay).plus(engineersStartTime.getTime()).plus(nightOver).toDate().getTime());
 		}            	
 		
 		return endTime;

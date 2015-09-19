@@ -12,10 +12,10 @@ import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty
 import org.optaplanner.core.api.domain.solution.PlanningSolution;
 import org.optaplanner.core.api.domain.solution.Solution;
 import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
-import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
+import org.optaplanner.core.api.score.buildin.hardsoftlong.HardSoftLongScore;
 
 @PlanningSolution
-public class Schedule implements Solution<HardSoftScore> 
+public class Schedule implements Solution<HardSoftLongScore> 
 {
 	Long id;
 	Timestamp timestamp;
@@ -26,7 +26,7 @@ public class Schedule implements Solution<HardSoftScore>
 	// Planning entities
 	List<Task> taskList;
 	
-	HardSoftScore score;
+	HardSoftLongScore score;
 	
 	public Long getId() {
 		return id;
@@ -65,12 +65,12 @@ public class Schedule implements Solution<HardSoftScore>
 	}
 
 	@Override
-	public HardSoftScore getScore() {
+	public HardSoftLongScore getScore() {
 		return score;
 	}
 
 	@Override
-	public void setScore(HardSoftScore score) {
+	public void setScore(HardSoftLongScore score) {
 		this.score = score;
 	}
 

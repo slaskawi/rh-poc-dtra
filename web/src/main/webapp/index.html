@@ -45,6 +45,7 @@
 						<li data-ng-class="{ active: isActive('/')}"><a href="#">Home</a></li>
 						<li data-ng-class="{ active: isActive('/scheduler')}"><a href="#/scheduler">Task Scheduler</a></li>
 						<li data-ng-class="{ active: isActive('/solutions')}"><a href="#/solutions">Solutions</a></li>
+						<li data-ng-class="{ active: isActive('/rules')}"><a href="#/rules">Rules</a></li> 
 					</ul>
 				</div>
 			</div>
@@ -57,6 +58,36 @@
 			<div data-ng-view></div>
 
 			<hr>
+
+
+<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization',
+       'version':'1','packages':['timeline']}]}"></script>
+<script type="text/javascript">
+
+google.setOnLoadCallback(drawChart);
+function drawChart() {
+  var container = document.getElementById('example4.2');
+  var chart = new google.visualization.Timeline(container);
+  var dataTable = new google.visualization.DataTable();
+
+  dataTable.addColumn({ type: 'string', id: 'Role' });
+  dataTable.addColumn({ type: 'string', id: 'Name' });
+  dataTable.addColumn({ type: 'date', id: 'Start' });
+  dataTable.addColumn({ type: 'date', id: 'End' });
+  dataTable.addRows([
+    [ '789674618', 'Convert log files into FMT using TEMS tool', new Date('2015-08-03 09:00:00'), new Date('2015-08-03 10:00:00') ],
+    [ '789674618', 'Download the drive test logs', new Date('2015-08-03 10:00:00'), new Date('2015-08-03 10:19:48') ],
+    [ '789674618', 'SSV report Finalization and Submission', new Date('2015-08-03 10:19:48'), new Date('2015-08-04 11:39:36') ]]);
+
+  var options = {
+    timeline: { groupByRowLabel: true }
+  };
+
+  chart.draw(dataTable, options);
+}
+</script>
+
+<div id="example4.2" style="height: 200px;"></div>
 
 			<!-- Footer -->
 			<footer>
