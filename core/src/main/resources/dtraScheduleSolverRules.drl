@@ -44,6 +44,10 @@ rule "priorityByDueDate" // closeToDueDate - 400pts -
 		Task($end : endingTime != null, $due : dueDate, dueDate after endingTime)
 	then
 		long p = ( ($due.getTime() - $end.getTime()) / ( 86400000l ) );
+		if(p == 0)
+		{
+			p = 1;
+		}
 		scoreHolder.addSoftConstraintMatch(kcontext, -1000l / p );
 end
 
