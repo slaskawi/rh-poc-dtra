@@ -1,29 +1,9 @@
 package mx.redhat.ericsson.dtra.scheduler;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.Executor;
-
-import javax.annotation.PreDestroy;
-import javax.ejb.EJB;
-import javax.ejb.Local;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.ParameterExpression;
-import javax.persistence.criteria.Root;
-
 import mx.redhat.ericsson.dtra.model.Engineer;
 import mx.redhat.ericsson.dtra.model.Task;
 import mx.redhat.ericsson.dtra.resources.ConfiguredCacheManager;
 import mx.redhat.ericsson.dtra.solver.Schedule;
-
 import org.infinispan.Cache;
 import org.infinispan.manager.EmbeddedCacheManager;
 import org.optaplanner.core.api.solver.Solver;
@@ -32,7 +12,28 @@ import org.optaplanner.core.api.solver.event.BestSolutionChangedEvent;
 import org.optaplanner.core.api.solver.event.SolverEventListener;
 import org.slf4j.Logger;
 
-@Stateless
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.ejb.EJB;
+import javax.ejb.Local;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Root;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.Executor;
+
+@Singleton
+@Startup
 @Local(ScheduleSolver.class)
 public class SchedulerSolverBean implements ScheduleSolver
 {
@@ -48,7 +49,13 @@ public class SchedulerSolverBean implements ScheduleSolver
 	
 	@Inject
 	Logger log;
-	
+
+   @PostConstruct
+   public void postConstruct() {
+      System.out.println("########### Creating SchedulerSolverBean ###########");
+      System.out.println("defaultCacheManager = " + defaultCacheManager);
+   }
+
 	@Override
 	public List<Schedule> retrieveSolutions(String sessionId) 
 	{
