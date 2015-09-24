@@ -9,65 +9,65 @@
     <description>DTRA Scheduler</description>
 	
 	<!-- Define a Security Constraint on this Application -->
-	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>all</web-resource-name>
-			<url-pattern>/*</url-pattern>
-		</web-resource-collection>
-		<auth-constraint>
-			<role-name>*</role-name>
-		</auth-constraint>
-	</security-constraint>
+	<!--<security-constraint>-->
+		<!--<web-resource-collection>-->
+			<!--<web-resource-name>all</web-resource-name>-->
+			<!--<url-pattern>/*</url-pattern>-->
+		<!--</web-resource-collection>-->
+		<!--<auth-constraint>-->
+			<!--<role-name>*</role-name>-->
+		<!--</auth-constraint>-->
+	<!--</security-constraint>-->
 	
 	
 		<!-- Define a security constraint that gives unlimited access to images -->
-	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>REST</web-resource-name>
-			<url-pattern>/application/*</url-pattern>
-		</web-resource-collection>
-		<web-resource-collection>
-			<web-resource-name>Fonts</web-resource-name>
-			<url-pattern>/fonts/*</url-pattern>
-		</web-resource-collection>
-		<web-resource-collection>
-			<web-resource-name>Resources</web-resource-name>
-			<url-pattern>/resources/*</url-pattern>
-		</web-resource-collection>
-		<web-resource-collection>
-			<web-resource-name>Images</web-resource-name>
-			<url-pattern>/images/*</url-pattern>
-		</web-resource-collection>
-		<web-resource-collection>
-			<web-resource-name>Scripts</web-resource-name>
-			<url-pattern>/scripts/*</url-pattern>
-		</web-resource-collection>
-		<web-resource-collection>
-			<web-resource-name>Styles</web-resource-name>
-			<url-pattern>/styles/*</url-pattern>
-		</web-resource-collection>
-		<web-resource-collection>
-			<web-resource-name>CSS</web-resource-name>
-			<url-pattern>/css/*</url-pattern>
-		</web-resource-collection>
-	</security-constraint>
+	<!--<security-constraint>-->
+		<!--<web-resource-collection>-->
+			<!--<web-resource-name>REST</web-resource-name>-->
+			<!--<url-pattern>/application/*</url-pattern>-->
+		<!--</web-resource-collection>-->
+		<!--<web-resource-collection>-->
+			<!--<web-resource-name>Fonts</web-resource-name>-->
+			<!--<url-pattern>/fonts/*</url-pattern>-->
+		<!--</web-resource-collection>-->
+		<!--<web-resource-collection>-->
+			<!--<web-resource-name>Resources</web-resource-name>-->
+			<!--<url-pattern>/resources/*</url-pattern>-->
+		<!--</web-resource-collection>-->
+		<!--<web-resource-collection>-->
+			<!--<web-resource-name>Images</web-resource-name>-->
+			<!--<url-pattern>/images/*</url-pattern>-->
+		<!--</web-resource-collection>-->
+		<!--<web-resource-collection>-->
+			<!--<web-resource-name>Scripts</web-resource-name>-->
+			<!--<url-pattern>/scripts/*</url-pattern>-->
+		<!--</web-resource-collection>-->
+		<!--<web-resource-collection>-->
+			<!--<web-resource-name>Styles</web-resource-name>-->
+			<!--<url-pattern>/styles/*</url-pattern>-->
+		<!--</web-resource-collection>-->
+		<!--<web-resource-collection>-->
+			<!--<web-resource-name>CSS</web-resource-name>-->
+			<!--<url-pattern>/css/*</url-pattern>-->
+		<!--</web-resource-collection>-->
+	<!--</security-constraint>-->
 
 
     <!-- Define the Login Configuration for this Application -->  
-    <login-config>
-		<auth-method>FORM</auth-method>
-		<form-login-config>
-			<form-login-page>/html/login.html</form-login-page>
-			<form-error-page>/html/login-error.html</form-error-page>
-		</form-login-config>
-	</login-config>
+    <!--<login-config>-->
+		<!--<auth-method>FORM</auth-method>-->
+		<!--<form-login-config>-->
+			<!--<form-login-page>/html/login.html</form-login-page>-->
+			<!--<form-error-page>/html/login-error.html</form-error-page>-->
+		<!--</form-login-config>-->
+	<!--</login-config>-->
 	
 
 	<!-- Security roles referenced by this web application -->
-	<security-role>
-		<description>The role that is required to log in to the Application</description>
-		<role-name>user</role-name>
-	</security-role>
+	<!--<security-role>-->
+		<!--<description>The role that is required to log in to the Application</description>-->
+		<!--<role-name>user</role-name>-->
+	<!--</security-role>-->
 	
 
 	<session-config>

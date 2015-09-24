@@ -22,12 +22,13 @@
         http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
    <persistence-unit name="dtra">
       <provider>org.hibernate.ejb.HibernatePersistence</provider>
-      <jta-data-source>java:jboss/datasources/dtra</jta-data-source>
+       <jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>
+      <!--<jta-data-source>java:jboss/datasources/dtra</jta-data-source>-->
       <properties>
          <!-- Properties for Hibernate -->
-         <property name="hibernate.show_sql" value="true" />
-         <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-         <property name="hibernate.default_schema" value="public"/>
+         <!--<property name="hibernate.show_sql" value="true" />-->
+         <!--<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>-->
+         <!--<property name="hibernate.default_schema" value="public"/>-->
          <!-- 
          <property name="jboss.entity.manager.factory.jndi.name" value="java:/rplannerEntityManagerFactory" />
           -->
